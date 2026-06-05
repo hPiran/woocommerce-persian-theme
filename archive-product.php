@@ -42,7 +42,7 @@ get_header();
                 <h1 class="archive-title">
                     <?php if ( is_product_category() || is_product_tag() ) :
                         single_term_title();
-                    elseif ( is_search() :
+                    elseif ( is_search() ) :
                         printf( esc_html__( 'نتایج جستجو: "%s"', 'woo-persian-store' ), esc_html( get_search_query() ) );
                     else :
                         esc_html_e( 'فروشگاه', 'woo-persian-store' );

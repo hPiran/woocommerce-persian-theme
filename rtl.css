@@ -1,0 +1,350 @@
+/*
+Theme Name: WooPersian Store
+RTL Stylesheet
+Description: RTL-specific overrides for WooPersian Store theme
+Version: 1.0.0
+*/
+
+/* ==========================================================================
+   RTL Base Overrides
+   ========================================================================== */
+body {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ==========================================================================
+   Typography RTL
+   ========================================================================== */
+blockquote {
+    border-right: 4px solid var(--color-primary);
+    border-left: none;
+    padding-right: 20px;
+    padding-left: 0;
+}
+
+/* ==========================================================================
+   Header RTL
+   ========================================================================== */
+.header-top .container {
+    flex-direction: row-reverse;
+}
+
+.header-main .container {
+    flex-direction: row-reverse;
+}
+
+.header-search .search-form {
+    flex-direction: row-reverse;
+}
+
+.header-actions {
+    flex-direction: row-reverse;
+}
+
+.cart-count {
+    top: 0;
+    left: 0;
+    right: auto;
+}
+
+/* ==========================================================================
+   Navigation RTL
+   ========================================================================== */
+.nav-menu .sub-menu {
+    right: 0;
+    left: auto;
+    text-align: right;
+}
+
+.nav-menu .sub-menu .sub-menu {
+    right: 100%;
+    left: auto;
+}
+
+.nav-menu a {
+    text-align: right;
+}
+
+/* ==========================================================================
+   Section Headers RTL
+   ========================================================================== */
+.section-title::after {
+    right: 0;
+    left: auto;
+}
+
+.section-link::after {
+    content: '\2190';
+}
+
+/* ==========================================================================
+   Product Cards RTL
+   ========================================================================== */
+.product-card .product-badges {
+    right: 10px;
+    left: auto;
+}
+
+.product-card .product-actions {
+    left: 10px;
+    right: 10px;
+}
+
+/* ==========================================================================
+   Hero Slider RTL
+   ========================================================================== */
+.hero-slider-dot {
+    transition: all 0.3s ease;
+}
+
+.hero-slider-dot.active,
+.hero-slider-dot:hover {
+    transform: none;
+}
+
+/* ==========================================================================
+   Footer RTL
+   ========================================================================== */
+.footer-widget h4::after {
+    right: 0;
+    left: auto;
+}
+
+.footer-widget ul li a:hover {
+    padding-right: 5px;
+    padding-left: 0;
+}
+
+.newsletter-form {
+    flex-direction: row-reverse;
+}
+
+.social-links {
+    flex-direction: row-reverse;
+}
+
+/* ==========================================================================
+   Sidebar RTL
+   ========================================================================== */
+.sidebar .widget-title {
+    text-align: right;
+}
+
+.sidebar .widget ul li a {
+    flex-direction: row-reverse;
+}
+
+.sidebar .widget ul li a::before {
+    content: '‹';
+    margin-left: 5px;
+    transition: var(--transition);
+}
+
+.sidebar .widget ul li a:hover::before {
+    margin-left: 8px;
+}
+
+/* ==========================================================================
+   Mini Cart RTL
+   ========================================================================== */
+.mini-cart {
+    right: -400px;
+    left: auto;
+}
+
+.mini-cart.active {
+    right: 0;
+}
+
+.mini-cart-close {
+    margin-left: auto;
+}
+
+/* ==========================================================================
+   Single Product RTL
+   ========================================================================== */
+.single-product-wrapper {
+    direction: rtl;
+}
+
+.product-gallery-thumbs {
+    flex-direction: row-reverse;
+}
+
+.product-summary .quantity-wrapper {
+    flex-direction: row-reverse;
+}
+
+.product-summary .cart-btn-group {
+    flex-direction: row-reverse;
+}
+
+/* ==========================================================================
+   Product Tabs RTL
+   ========================================================================== */
+.product-tabs .tabs {
+    flex-direction: row-reverse;
+}
+
+.product-tabs .tabs .tab.active::after {
+    right: 0;
+}
+
+/* ==========================================================================
+   WooCommerce Overrides RTL
+   ========================================================================== */
+.woocommerce-ordering {
+    text-align: right;
+}
+
+.woocommerce-ordering select {
+    direction: rtl;
+}
+
+.woocommerce-result-count {
+    text-align: right;
+}
+
+/* Price Filter RTL */
+.price-filter {
+    direction: rtl;
+}
+
+/* Star Ratings RTL */
+.star-rating {
+    direction: rtl;
+}
+
+/* ==========================================================================
+   404 Page RTL
+   ========================================================================== */
+.error-404 .search-form input {
+    text-align: right;
+}
+
+/* ==========================================================================
+   Blog RTL
+   ========================================================================== */
+.post-card .post-content {
+    text-align: right;
+}
+
+.post-card .post-meta {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.single-post-header .post-meta {
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+.post-navigation .post-nav-next {
+    text-align: left;
+}
+
+/* ==========================================================================
+   Breadcrumb RTL
+   ========================================================================== */
+.breadcrumb {
+    direction: rtl;
+    text-align: right;
+}
+
+.breadcrumb .separator {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+
+/* ==========================================================================
+   Forms RTL
+   ========================================================================== */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+    direction: rtl;
+    text-align: right;
+}
+
+.comment-form .comment-form-author,
+.comment-form .comment-form-email,
+.comment-form .comment-form-url {
+    float: right;
+    margin-left: 3.33%;
+    margin-right: 0;
+}
+
+.comment-form .comment-form-author:first-child,
+.comment-form .comment-form-email:first-child {
+    margin-right: 0;
+}
+
+/* ==========================================================================
+   Misc RTL Adjustments
+   ========================================================================== */
+.screen-reader-text:focus {
+    right: 5px;
+    left: auto;
+}
+
+/* Ensure icons don't get mirrored */
+i[class^="fa-"],
+i[class*=" fa-"],
+span.dashicons,
+.svg-icon {
+    transform: none;
+    direction: ltr;
+}
+
+/* Fix left-aligned elements */
+.alignleft {
+    float: left;
+    margin-right: 1.5em;
+    margin-left: 0;
+}
+
+.alignright {
+    float: right;
+    margin-left: 1.5em;
+    margin-right: 0;
+}
+
+.aligncenter {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* ==========================================================================
+   Responsive RTL Fixes
+   ========================================================================== */
+@media (max-width: 768px) {
+    .nav-menu .sub-menu {
+        padding-right: 15px;
+        padding-left: 0;
+    }
+
+    .header-search .search-form {
+        flex-direction: row-reverse;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card .product-actions {
+        left: 5px;
+        right: 5px;
+    }
+}

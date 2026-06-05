@@ -1,0 +1,241 @@
+# Persian (Iran) translation for WC Persian Theme.
+# Copyright (C) 2026 WC Persian Theme
+# This file is distributed under the same license as the WC Persian Theme.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WC Persian Theme 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-06 00:00+0330\n"
+"PO-Revision-Date: 2026-06-06 00:00+0330\n"
+"Last-Translator: Translator <translator@example.com>\n"
+"Language-Team: Persian (Iran)\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1) ? 0 : 1;\n"
+"X-Generator: Poedit 3.4\n"
+
+# ── Navigation ──────────────────────────────────────────────────
+
+msgid "Home"
+msgstr "خانه"
+
+msgid "Shop"
+msgstr "فروشگاه"
+
+msgid "My Account"
+msgstr "حساب کاربری"
+
+msgid "Contact Us"
+msgstr "تماس با ما"
+
+msgid "About Us"
+msgstr "درباره ما"
+
+msgid "Blog"
+msgstr "وبلاگ"
+
+msgid "Cart"
+msgstr "سبد خرید"
+
+msgid "Checkout"
+msgstr "تکمیل سفارش"
+
+# ── Buttons ─────────────────────────────────────────────────────
+
+msgid "Add to Cart"
+msgstr "افزودن به سبد خرید"
+
+msgid "View Cart"
+msgstr "مشاهده سبد خرید"
+
+msgid "Continue Shopping"
+msgstr "ادامه خرید"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "Read More"
+msgstr "ادامه مطلب"
+
+msgid "Submit"
+msgstr "ارسال"
+
+msgid "Back to Top"
+msgstr "بازگشت به بالا"
+
+# ── Shop / Archive ──────────────────────────────────────────────
+
+msgid "Showing all results"
+msgstr "نمایش همه نتایج"
+
+msgid "Sort by"
+msgstr "مرتب‌سازی بر اساس"
+
+msgid "Popularity"
+msgstr "محبوب‌ترین"
+
+msgid "Newest"
+msgstr "جدیدترین"
+
+msgid "Price: low to high"
+msgstr "ارزان‌ترین"
+
+msgid "Price: high to low"
+msgstr "گران‌ترین"
+
+msgid "Default sorting"
+msgstr "مرتب‌سازی پیش‌فرض"
+
+msgid "No products were found matching your selection."
+msgstr "محصولی با انتخاب شما یافت نشد."
+
+# ── Product / Single ────────────────────────────────────────────
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "Reviews"
+msgstr "نظرات"
+
+msgid "Related Products"
+msgstr "محصولات مرتبط"
+
+msgid "In Stock"
+msgstr "موجود"
+
+msgid "Out of Stock"
+msgstr "ناموجود"
+
+msgid "Add to Wishlist"
+msgstr "افزودن به لیست علاقه‌مندی"
+
+msgid "SKU"
+msgstr "کد محصول"
+
+msgid "Category"
+msgstr "دسته‌بندی"
+
+msgid "Tags"
+msgstr "برچسب‌ها"
+
+# ── Cart ────────────────────────────────────────────────────────
+
+msgid "Your cart is currently empty."
+msgstr "سبد خرید شما خالی است."
+
+msgid "Subtotal"
+msgstr "جمع فرعی"
+
+msgid "Total"
+msgstr "مجموع"
+
+msgid "Proceed to Checkout"
+msgstr "ادامه جهت خرید"
+
+msgid "Remove this item"
+msgstr "حذف این محصول"
+
+msgid "Update Cart"
+msgstr "بروزرسانی سبد خرید"
+
+# ── Mini-Cart / AJAX ────────────────────────────────────────────
+
+msgid "View all notifications"
+msgstr "مشاهده همه اعلان‌ها"
+
+msgid "Product has been added to your cart."
+msgstr "محصول به سبد خرید شما اضافه شد."
+
+# ── Misc / Utility ──────────────────────────────────────────────
+
+msgid "Page not found"
+msgstr "صفحه مورد نظر یافت نشد"
+
+msgid "Go to Homepage"
+msgstr "برگشت به صفحه اصلی"
+
+msgid "All rights reserved."
+msgstr "حقوق محفوظ است"
+
+msgid "Newsletter"
+msgstr "خبرنامه"
+
+msgid "Subscribe"
+msgstr "اشتراک"
+
+msgid "Enter your email address"
+msgstr "ایمیل خود را وارد کنید"
+
+msgid "Close"
+msgstr "بستن"
+
+msgid "Menu"
+msgstr "منو"
+
+msgid "Loading..."
+msgstr "در حال بارگذاری..."
+
+# ── Customizer ──────────────────────────────────────────────────
+
+msgid "Colors"
+msgstr "رنگ‌ها"
+
+msgid "Primary Color"
+msgstr "رنگ اصلی"
+
+msgid "Button Color"
+msgstr "رنگ دکمه‌ها"
+
+msgid "Text Color"
+msgstr "رنگ متن"
+
+msgid "Background Color"
+msgstr "رنگ پس‌زمینه"
+
+msgid "Header Options"
+msgstr "تنظیمات سربرگ"
+
+msgid "Sticky Header"
+msgstr "سربرگ چسبان"
+
+msgid "Show Search Bar"
+msgstr "نمایش نوار جستجو"
+
+msgid "Show Cart Icon"
+msgstr "نمایش آیکون سبد خرید"
+
+msgid "Footer Options"
+msgstr "تنظیمات پاورقی"
+
+msgid "Copyright Text"
+msgstr "متن کپی‌رایت"
+
+msgid "Phone Number"
+msgstr "شماره تلفن"
+
+msgid "Email"
+msgstr "ایمیل"
+
+msgid "Address"
+msgstr "آدرس"
+
+# ── WooCommerce-Specific ───────────────────────────────────────
+
+msgid "Sale!"
+msgstr "حراج!"
+
+msgid "New!"
+msgstr "جدید!"
+
+msgid "Featured!"
+msgstr "ویژه!"
+
+msgid "Free shipping"
+msgstr "ارسال رایگان"
+
+msgid "Toman"
+msgstr "تومان"

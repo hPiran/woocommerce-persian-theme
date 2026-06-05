@@ -2,11 +2,18 @@
 /**
  * Product Sidebar Template
  *
+ * Only displayed when woopersian_has_shop_sidebar() returns true.
+ * Sidebar is never shown on single product pages.
+ *
  * @package WooPersian_Store
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
+}
+
+if ( ! woopersian_has_shop_sidebar() ) {
+    return;
 }
 ?>
 

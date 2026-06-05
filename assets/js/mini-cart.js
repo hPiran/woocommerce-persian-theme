@@ -5,6 +5,13 @@
  * Listens for WooCommerce cart fragment updates, syncs the header badge,
  * and manages the slide-in / slide-out mini-cart panel.
  *
+ * IDs and classes match header.php markup:
+ *   - #miniCart       → the sidebar panel
+ *   - #miniCartOverlay → the backdrop overlay
+ *   - #miniCartClose  → the close button
+ *   - .cart-contents  → the header cart icon (also #cartToggle)
+ *   - .active         → CSS class for open state (matches style.css)
+ *
  * @package WC_Persian
  */
 
@@ -14,11 +21,11 @@
 	/* ---------------------------------------------------------------
 	 *  DOM References (resolved once on load)
 	 * -------------------------------------------------------------- */
-	var miniCart       = document.getElementById('mini-cart');
-	var miniCartOverlay = document.getElementById('mini-cart-overlay');
-	var miniCartClose  = document.getElementById('mini-cart-close');
-	var cartIcon       = document.querySelector('.cart-contents, .header-cart-icon');
-	var body           = document.body;
+	var miniCart        = document.getElementById('miniCart');
+	var miniCartOverlay = document.getElementById('miniCartOverlay');
+	var miniCartClose   = document.getElementById('miniCartClose');
+	var cartIcon        = document.querySelector('.cart-contents, #cartToggle, .header-cart-icon');
+	var body            = document.body;
 
 	/* ---------------------------------------------------------------
 	 *  Helpers
@@ -31,10 +38,10 @@
 		if (!miniCart) {
 			return;
 		}
-		miniCart.classList.add('is-open');
+		miniCart.classList.add('active');
 		miniCart.setAttribute('aria-hidden', 'false');
 		if (miniCartOverlay) {
-			miniCartOverlay.classList.add('is-visible');
+			miniCartOverlay.classList.add('active');
 		}
 		body.classList.add('mini-cart-open');
 
@@ -51,10 +58,10 @@
 		if (!miniCart) {
 			return;
 		}
-		miniCart.classList.remove('is-open');
+		miniCart.classList.remove('active');
 		miniCart.setAttribute('aria-hidden', 'true');
 		if (miniCartOverlay) {
-			miniCartOverlay.classList.remove('is-visible');
+			miniCartOverlay.classList.remove('active');
 		}
 		body.classList.remove('mini-cart-open');
 
@@ -82,6 +89,7 @@
 		}
 
 		Object.keys(fragments).forEach(function (selector) {
+			// Update cart count badges.
 			if (selector === '.cart-count') {
 				var badges = document.querySelectorAll('.cart-count');
 				var newHtml = fragments[selector];
@@ -91,8 +99,8 @@
 				temp.innerHTML = newHtml;
 				var newBadge = temp.querySelector('.cart-count');
 
-				var count      = newBadge ? parseInt(newBadge.textContent.trim(), 10) || 0 : 0;
-				var isEmpty    = count === 0;
+				var count   = newBadge ? parseInt(newBadge.textContent.trim(), 10) || 0 : 0;
+				var isEmpty = count === 0;
 
 				badges.forEach(function (badge) {
 					badge.textContent = newBadge ? newBadge.textContent.trim() : count;
@@ -119,10 +127,11 @@
 	 *  Event Listeners
 	 * -------------------------------------------------------------- */
 
-	// Open mini-cart when the header cart icon is clicked.
+	// Open mini-cart when the header cart icon/button is clicked.
 	if (cartIcon) {
 		cartIcon.addEventListener('click', function (e) {
 			e.preventDefault();
+			e.stopPropagation();
 			openMiniCart();
 		});
 	}
@@ -143,7 +152,7 @@
 
 	// Close mini-cart on Escape key.
 	document.addEventListener('keydown', function (e) {
-		if (e.key === 'Escape' && miniCart && miniCart.classList.contains('is-open')) {
+		if (e.key === 'Escape' && miniCart && miniCart.classList.contains('active')) {
 			closeMiniCart();
 		}
 	});
@@ -154,10 +163,6 @@
 	 * WooCommerce uses jQuery to trigger a 'added_to_cart' event on
 	 * the document body with the fragments payload.  Because this
 	 * theme loads vanilla JS, we need to bridge that jQuery event.
-	 *
-	 * Strategy: if jQuery is present, bind to the event directly.
-	 * If not, fall back to a MutationObserver on the cart badge
-	 * elements (unlikely to be needed but nice to have).
 	 */
 	function listenForFragments() {
 		// Approach 1 — jQuery event (WooCommerce's native mechanism).
@@ -169,8 +174,7 @@
 			});
 		}
 
-		// Approach 2 — vanilla fallback: observe the cart widget for DOM mutations
-		// (handles cases where fragments are injected by non-jQuery code).
+		// Approach 2 — vanilla fallback: observe the cart widget for DOM mutations.
 		var widgetContainer = document.querySelector('div.widget_shopping_cart_content');
 		if (widgetContainer && typeof MutationObserver !== 'undefined') {
 			var observer = new MutationObserver(function (mutations) {
@@ -182,13 +186,6 @@
 				});
 
 				if (changed) {
-					// Re-read the count from the widget's cart total link.
-					var cartTotal = widgetContainer.querySelector('.woocommerce-mini-cart__total .woocommerce-Price-amount');
-					if (!cartTotal) {
-						cartTotal = widgetContainer.querySelector('.total .amount');
-					}
-
-					// Alternatively, read the badge count that WooCommerce inserts.
 					var countEls = widgetContainer.querySelectorAll('.count, .quantity');
 					if (countEls.length) {
 						var count = parseInt(countEls[0].textContent.trim(), 10) || 0;

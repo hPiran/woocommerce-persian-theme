@@ -15,6 +15,23 @@ define( 'WOOPERSIAN_DIR', get_template_directory() );
 define( 'WOOPERSIAN_URI', get_template_directory_uri() );
 
 /**
+ * Force RTL / Persian locale
+ */
+add_filter( 'locale', function() {
+    return 'fa_IR';
+} );
+
+/**
+ * Ensure front-page.php is used for the static front page
+ */
+add_filter( 'template_include', function( $template ) {
+    if ( is_front_page() && locate_template( 'front-page.php' ) ) {
+        return locate_template( 'front-page.php' );
+    }
+    return $template;
+}, 99 );
+
+/**
  * Theme Setup
  */
 function woopersian_setup() {
@@ -207,17 +224,15 @@ function woopersian_woocommerce_setup() {
 }
 
 function woopersian_wc_wrapper_start() {
-    echo '<div class="site-content"><div class="container"><main id="primary" class="content-area">';
+    echo '<div class="container"><main id="primary" class="content-area">';
 }
 
 function woopersian_wc_wrapper_end() {
     echo '</main>';
-    if ( is_active_sidebar( 'shop-sidebar' ) && ! is_product() ) {
-        echo '<aside id="secondary" class="widget-area sidebar">';
-        dynamic_sidebar( 'shop-sidebar' );
-        echo '</aside>';
+    if ( woopersian_has_shop_sidebar() ) {
+        get_sidebar( 'product' );
     }
-    echo '</div></div>';
+    echo '</div><!-- .container -->';
 }
 
 function woopersian_loop_columns() {
@@ -324,22 +339,40 @@ function woopersian_product_star_rating() {
 }
 
 /**
+ * Determine whether the shop sidebar should be displayed.
+ */
+function woopersian_has_shop_sidebar() {
+    // Never show sidebar on single product pages
+    if ( is_product() ) {
+        return false;
+    }
+    // Show sidebar if the widget area has active widgets
+    return is_active_sidebar( 'shop-sidebar' );
+}
+
+/**
  * Add body classes
  */
 function woopersian_body_classes( $classes ) {
     $classes[] = 'woopersian';
-    $classes[] = is_rtl() ? 'rtl' : 'ltr';
+    $classes[] = 'rtl';
 
-    if ( is_active_sidebar( 'shop-sidebar' ) && ( is_shop() || is_product_category() || is_product_tag() ) ) {
+    // Sidebar visibility class
+    if ( woopersian_has_shop_sidebar() && ( is_shop() || is_product_category() || is_product_tag() ) ) {
         $classes[] = 'has-sidebar';
+    } else {
+        $classes[] = 'no-sidebar';
     }
 
-    if ( is_active_sidebar( 'blog-sidebar' ) && ( is_home() || is_archive() && ! is_shop() ) ) {
+    if ( is_active_sidebar( 'blog-sidebar' ) && ( is_home() || ( is_archive() && ! is_shop() ) ) ) {
         $classes[] = 'has-sidebar';
     }
 
     if ( class_exists( 'WooCommerce' ) ) {
         $classes[] = 'woocommerce-active';
+        if ( is_shop() || is_product_category() || is_product_tag() ) {
+            $classes[] = 'columns-' . woopersian_loop_columns();
+        }
     }
 
     return $classes;
@@ -404,3 +437,35 @@ function woopersian_disable_emojis() {
     remove_action( 'wp_print_styles', 'print_emoji_styles' );
 }
 add_action( 'init', 'woopersian_disable_emojis' );
+
+/**
+ * Mini-cart WooCommerce Cart Fragments
+ * Ensures AJAX cart updates refresh the mini-cart sidebar and count badge.
+ */
+function woopersian_cart_fragments( $fragments ) {
+    // Cart count badge fragment
+    ob_start();
+    $count = WC()->cart->get_cart_contents_count();
+    echo '<span class="cart-count' . ( 0 === $count ? ' cart-empty' : '' ) . '">';
+    echo esc_html( woopersian_persian_numerals( $count ) );
+    echo '</span>';
+    $fragments['.cart-count'] = ob_get_clean();
+
+    // Mini-cart content fragment
+    ob_start();
+    woocommerce_mini_cart();
+    $fragments['div.widget_shopping_cart_content'] = ob_get_clean();
+
+    return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'woopersian_cart_fragments' );
+
+/**
+ * Ensure WooCommerce outputs semantic <ul> for product loops
+ */
+function woopersian_product_loop_start_args( $args ) {
+    if ( isset( $args['before'] ) ) {
+        $args['before'] = '<ul class="products">';
+    }
+    return $args;
+}

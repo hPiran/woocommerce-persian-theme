@@ -3,7 +3,7 @@
  *
  * Vanilla JS — zero jQuery dependency.
  * Handles: mobile menu, sticky header, quantity buttons,
- * scroll-to-top button, and mobile search toggle.
+ * scroll-to-top button, mobile search toggle, and mini-cart fallback.
  *
  * @package WC_Persian
  */
@@ -13,14 +13,11 @@
 
 	/* ---------------------------------------------------------------
 	 *  Mobile Menu Toggle
-	 * --------------------------------------------------------------
-	 * Toggles the primary navigation on small screens via a hamburger
-	 * button. Adds/removes .menu-open on the <body> for overlay styling.
-	 */
+	 * -------------------------------------------------------------- */
 	function initMobileMenu() {
-		var toggle  = document.querySelector('.menu-toggle');
-		var nav     = document.querySelector('.primary-navigation');
-		var body    = document.body;
+		var toggle = document.querySelector('.menu-toggle');
+		var nav    = document.getElementById('site-navigation');
+		var body   = document.body;
 
 		if (!toggle || !nav) {
 			return;
@@ -28,28 +25,38 @@
 
 		toggle.addEventListener('click', function (e) {
 			e.preventDefault();
-			var isOpen = nav.classList.toggle('is-open');
-			toggle.classList.toggle('is-active', isOpen);
+			var isOpen = nav.classList.toggle('active');
+			toggle.classList.toggle('active', isOpen);
 			body.classList.toggle('menu-open', isOpen);
-			toggle.setAttribute('aria-expanded', isOpen);
+			toggle.setAttribute('aria-expanded', String(isOpen));
+
+			// Toggle the nav-menu inside the navigation.
+			var navMenu = nav.querySelector('.nav-menu');
+			if (navMenu) {
+				navMenu.classList.toggle('active', isOpen);
+			}
 		});
 
-		// Close menu when clicking a nav link (useful for one-page sections).
-		var navLinks = nav.querySelectorAll('a');
+		// Close menu when clicking a nav link.
+		var navLinks = nav.querySelectorAll('.nav-menu a');
 		navLinks.forEach(function (link) {
 			link.addEventListener('click', function () {
-				nav.classList.remove('is-open');
-				toggle.classList.remove('is-active');
+				nav.classList.remove('active');
+				toggle.classList.remove('active');
 				body.classList.remove('menu-open');
 				toggle.setAttribute('aria-expanded', 'false');
+				var navMenu = nav.querySelector('.nav-menu');
+				if (navMenu) {
+					navMenu.classList.remove('active');
+				}
 			});
 		});
 
 		// Close menu on Escape key.
 		document.addEventListener('keydown', function (e) {
-			if (e.key === 'Escape' && nav.classList.contains('is-open')) {
-				nav.classList.remove('is-open');
-				toggle.classList.remove('is-active');
+			if (e.key === 'Escape' && nav.classList.contains('active')) {
+				nav.classList.remove('active');
+				toggle.classList.remove('active');
 				body.classList.remove('menu-open');
 				toggle.setAttribute('aria-expanded', 'false');
 				toggle.focus();
@@ -59,11 +66,7 @@
 
 	/* ---------------------------------------------------------------
 	 *  Sticky Header
-	 * --------------------------------------------------------------
-	 * After scrolling past 100 px the header receives .sticky-header
-	 * for a fixed + shadow effect. The threshold is configurable via
-	 * the data-sticky-threshold attribute on the header element.
-	 */
+	 * -------------------------------------------------------------- */
 	function initStickyHeader() {
 		var header    = document.querySelector('.site-header');
 		var threshold = header
@@ -80,11 +83,9 @@
 			if (!ticking) {
 				requestAnimationFrame(function () {
 					if (window.scrollY > threshold) {
-						header.classList.add('sticky-header');
-						header.classList.add('is-sticky');
+						header.classList.add('scrolled');
 					} else {
-						header.classList.remove('sticky-header');
-						header.classList.remove('is-sticky');
+						header.classList.remove('scrolled');
 					}
 					ticking = false;
 				});
@@ -93,16 +94,12 @@
 		}
 
 		window.addEventListener('scroll', onScroll, { passive: true });
-		// Run once on load in case the page is already scrolled.
 		onScroll();
 	}
 
 	/* ---------------------------------------------------------------
 	 *  Product Quantity Buttons
-	 * --------------------------------------------------------------
-	 * Adds ±1 increment / decrement buttons to WooCommerce quantity
-	 * inputs found on the cart page and single-product pages.
-	 */
+	 * -------------------------------------------------------------- */
 	function initQuantityButtons() {
 		var inputs = document.querySelectorAll(
 			'.quantity input[type="number"], .woocommerce .quantity input.qty'
@@ -114,33 +111,36 @@
 				return;
 			}
 
-			var min     = parseFloat(input.min) || 0;
-			var max     = parseFloat(input.max) || Infinity;
-			var step    = parseFloat(input.step) || 1;
+			// Skip if buttons already exist.
+			if (wrapper.querySelector('.qty-minus')) {
+				return;
+			}
 
-			// Decrement button.
+			var min  = parseFloat(input.min) || 0;
+			var max  = parseFloat(input.max) || Infinity;
+			var step = parseFloat(input.step) || 1;
+
 			var btnMinus = document.createElement('button');
-			btnMinus.type          = 'button';
-			btnMinus.className     = 'qty-btn qty-minus';
-			btnMinus.textContent   = '−';
+			btnMinus.type        = 'button';
+			btnMinus.className   = 'qty-btn qty-minus';
+			btnMinus.textContent = '−';
 			btnMinus.setAttribute('aria-label', 'کاهش تعداد');
 
-			// Increment button.
 			var btnPlus = document.createElement('button');
-			btnPlus.type          = 'button';
-			btnPlus.className     = 'qty-btn qty-plus';
-			btnPlus.textContent   = '+';
+			btnPlus.type        = 'button';
+			btnPlus.className   = 'qty-btn qty-plus';
+			btnPlus.textContent = '+';
 			btnPlus.setAttribute('aria-label', 'افزایش تعداد');
 
 			btnMinus.addEventListener('click', function () {
-				var val = parseFloat(input.value) || 0;
+				var val    = parseFloat(input.value) || 0;
 				var newVal = Math.max(min, val - step);
 				input.value = newVal;
 				input.dispatchEvent(new Event('change', { bubbles: true }));
 			});
 
 			btnPlus.addEventListener('click', function () {
-				var val = parseFloat(input.value) || 0;
+				var val    = parseFloat(input.value) || 0;
 				var newVal = Math.min(max, val + step);
 				input.value = newVal;
 				input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -153,19 +153,15 @@
 
 	/* ---------------------------------------------------------------
 	 *  Scroll-to-Top Button
-	 * --------------------------------------------------------------
-	 * A floating button that fades in after the user scrolls 300 px
-	 * and smoothly scrolls back to the top when clicked.
-	 */
+	 * -------------------------------------------------------------- */
 	function initScrollToTop() {
-		// Create the button if it doesn't exist in the markup.
 		var btn = document.getElementById('scroll-to-top');
 		if (!btn) {
 			btn = document.createElement('button');
-			btn.id          = 'scroll-to-top';
-			btn.className   = 'scroll-to-top';
+			btn.id        = 'scroll-to-top';
+			btn.className = 'scroll-to-top';
 			btn.setAttribute('aria-label', 'بازگشت به بالا');
-			btn.innerHTML   = '&#8593;';  // ↑
+			btn.innerHTML  = '&#8593;';
 			document.body.appendChild(btn);
 		}
 
@@ -194,53 +190,96 @@
 	}
 
 	/* ---------------------------------------------------------------
-	 *  Mobile Search Toggle
+	 *  Mini-Cart Toggle (fallback / direct binding)
 	 * --------------------------------------------------------------
-	 * Toggles the search form visibility on mobile viewports.
+	 * Provides a direct event listener on the #cartToggle button
+	 * as a safety net if mini-cart.js hasn't loaded or was blocked.
 	 */
-	function initMobileSearch() {
-		var toggle = document.querySelector('.header-search-toggle');
-		var form   = document.querySelector('.header-search-form');
+	function initMiniCartFallback() {
+		var cartToggle = document.getElementById('cartToggle');
+		var miniCart   = document.getElementById('miniCart');
+		var overlay    = document.getElementById('miniCartOverlay');
+		var closeBtn   = document.getElementById('miniCartClose');
 
-		if (!toggle || !form) {
+		if (!cartToggle || !miniCart) {
 			return;
 		}
 
-		toggle.addEventListener('click', function (e) {
+		cartToggle.addEventListener('click', function (e) {
 			e.preventDefault();
-			var isOpen = form.classList.toggle('is-open');
-			toggle.classList.toggle('is-active', isOpen);
-			toggle.setAttribute('aria-expanded', isOpen);
-
-			// Focus the search input when opening.
-			if (isOpen) {
-				var input = form.querySelector('input[type="search"]');
-				if (input) {
-					input.focus();
-				}
+			e.stopPropagation();
+			miniCart.classList.add('active');
+			miniCart.setAttribute('aria-hidden', 'false');
+			if (overlay) {
+				overlay.classList.add('active');
 			}
 		});
 
-		// Close search when pressing Escape.
+		if (closeBtn) {
+			closeBtn.addEventListener('click', function () {
+				miniCart.classList.remove('active');
+				miniCart.setAttribute('aria-hidden', 'true');
+				if (overlay) {
+					overlay.classList.remove('active');
+				}
+			});
+		}
+
+		if (overlay) {
+			overlay.addEventListener('click', function () {
+				miniCart.classList.remove('active');
+				miniCart.setAttribute('aria-hidden', 'true');
+				overlay.classList.remove('active');
+			});
+		}
+
+		// Close on Escape.
 		document.addEventListener('keydown', function (e) {
-			if (e.key === 'Escape' && form.classList.contains('is-open')) {
-				form.classList.remove('is-open');
-				toggle.classList.remove('is-active');
-				toggle.setAttribute('aria-expanded', 'false');
-				toggle.focus();
+			if (e.key === 'Escape' && miniCart.classList.contains('active')) {
+				miniCart.classList.remove('active');
+				miniCart.setAttribute('aria-hidden', 'true');
+				if (overlay) {
+					overlay.classList.remove('active');
+				}
 			}
 		});
 	}
 
 	/* ---------------------------------------------------------------
-	 *  Bootstrap — run everything once the DOM is ready.
+	 *  Layout Toggle (Grid / List)
+	 * -------------------------------------------------------------- */
+	function initLayoutToggle() {
+		var layoutBtns = document.querySelectorAll('.layout-btn');
+		var productsUl = document.querySelector('ul.products');
+		if (!layoutBtns.length || !productsUl) {
+			return;
+		}
+
+		layoutBtns.forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				layoutBtns.forEach(function (b) { b.classList.remove('active'); });
+				btn.classList.add('active');
+
+				var layout = btn.getAttribute('data-layout');
+				if (layout === 'list') {
+					productsUl.classList.add('list-view');
+				} else {
+					productsUl.classList.remove('list-view');
+				}
+			});
+		});
+	}
+
+	/* ---------------------------------------------------------------
+	 *  Bootstrap
 	 * -------------------------------------------------------------- */
 	document.addEventListener('DOMContentLoaded', function () {
 		initMobileMenu();
 		initStickyHeader();
 		initQuantityButtons();
 		initScrollToTop();
-		initMobileSearch();
+		initMiniCartFallback();
+		initLayoutToggle();
 	});
 
 })();

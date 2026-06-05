@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <!DOCTYPE html>
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?> dir="rtl" lang="fa">
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,10 +74,10 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </a>
 
                     <!-- Cart -->
-                    <button class="header-action-btn cart-toggle" title="<?php esc_attr_e( 'سبد خرید', 'woo-persian-store' ); ?>">
+                    <a href="#" class="header-action-btn cart-contents" id="cartToggle" title="<?php esc_attr_e( 'سبد خرید', 'woo-persian-store' ); ?>">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                         <span class="cart-count"><?php echo esc_html( woopersian_persian_numerals( WC()->cart->get_cart_contents_count() ) ); ?></span>
-                    </button>
+                    </a>
 
                     <!-- Mobile Menu Toggle -->
                     <button class="menu-toggle" aria-label="<?php esc_attr_e( 'منوی موبایل', 'woo-persian-store' ); ?>">
@@ -110,7 +110,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <!-- Mini Cart Sidebar -->
     <div class="mini-cart-overlay" id="miniCartOverlay"></div>
-    <div class="mini-cart" id="miniCart">
+    <div class="mini-cart" id="miniCart" aria-hidden="true">
         <div class="mini-cart-header">
             <h3><?php esc_html_e( 'سبد خرید', 'woo-persian-store' ); ?></h3>
             <button class="mini-cart-close" id="miniCartClose" aria-label="<?php esc_attr_e( 'بستن سبد خرید', 'woo-persian-store' ); ?>">
@@ -118,45 +118,10 @@ if ( ! defined( 'ABSPATH' ) ) {
             </button>
         </div>
         <div class="mini-cart-body">
-            <?php if ( class_exists( 'WooCommerce' ) && ! WC()->cart->is_empty() ) : ?>
-                <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
-                    $_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
-                    $product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
-                    if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 ) :
-                        $product_name = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
-                        $thumbnail   = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image( 'product-gallery-thumb' ), $cart_item, $cart_item_key );
-                        $product_price = apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key );
-                ?>
-                    <div class="mini-cart-item">
-                        <div class="mini-cart-item-image">
-                            <?php echo $thumbnail; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        </div>
-                        <div class="mini-cart-item-info">
-                            <div class="item-name"><?php echo wp_kses_post( $product_name ); ?></div>
-                            <div class="item-qty">
-                                <?php printf( esc_html__( 'تعداد: %s', 'woo-persian-store' ), woopersian_persian_numerals( $cart_item['quantity'] ) ); ?>
-                            </div>
-                            <div class="item-price"><?php echo wp_kses_post( $product_price ); ?></div>
-                        </div>
-                    </div>
-                <?php endif; endforeach; ?>
-            <?php else : ?>
-                <div class="mini-cart-empty">
-                    <span class="empty-icon">🛒</span>
-                    <p><?php esc_html_e( 'سبد خرید شما خالی است!', 'woo-persian-store' ); ?></p>
-                </div>
-            <?php endif; ?>
-        </div>
-        <?php if ( class_exists( 'WooCommerce' ) && ! WC()->cart->is_empty() ) : ?>
-        <div class="mini-cart-footer">
-            <div class="mini-cart-total">
-                <span><?php esc_html_e( 'جمع کل:', 'woo-persian-store' ); ?></span>
-                <span><?php echo wp_kses_post( WC()->cart->get_cart_subtotal() ); ?></span>
+            <div class="widget_shopping_cart_content">
+                <?php if ( class_exists( 'WooCommerce' ) ) { woocommerce_mini_cart(); } ?>
             </div>
-            <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="btn btn-outline btn-sm"><?php esc_html_e( 'مشاهده سبد خرید', 'woo-persian-store' ); ?></a>
-            <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="btn btn-cta btn-sm" style="margin-top:10px;width:100%;"><?php esc_html_e( 'تکمیل خرید', 'woo-persian-store' ); ?></a>
         </div>
-        <?php endif; ?>
     </div>
 
     <div id="content" class="site-content">

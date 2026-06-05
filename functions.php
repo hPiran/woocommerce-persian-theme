@@ -268,6 +268,62 @@ function woopersian_persian_price( $price, $with_toman = true ) {
 }
 
 /**
+ * Fallback Menu
+ */
+function woopersian_fallback_menu() {
+    echo '<ul class="nav-menu">';
+    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'صفحه اصلی', 'woo-persian-store' ) . '</a></li>';
+    echo '<li><a href="' . esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ) . '">' . esc_html__( 'فروشگاه', 'woo-persian-store' ) . '</a></li>';
+    echo '</ul>';
+}
+
+/**
+ * Product Badges (sale, new, featured)
+ */
+function woopersian_product_badges() {
+    global $product;
+    if ( ! $product ) {
+        return;
+    }
+
+    $badges = array();
+
+    if ( $product->is_featured() ) {
+        $badges[] = '<span class="badge badge-featured">' . esc_html__( 'ویژه!', 'woo-persian-store' ) . '</span>';
+    }
+
+    $created = get_the_date( 'U', $product->get_id() );
+    if ( $created && ( time() - $created ) < 30 * DAY_IN_SECONDS ) {
+        $badges[] = '<span class="badge badge-new">' . esc_html__( 'جدید!', 'woo-persian-store' ) . '</span>';
+    }
+
+    if ( ! empty( $badges ) ) {
+        echo '<div class="product-badges">' . implode( '', $badges ) . '</div>';
+    }
+}
+
+/**
+ * Product Star Rating
+ */
+function woopersian_product_star_rating() {
+    global $product;
+    if ( ! $product ) {
+        return;
+    }
+
+    $rating = $product->get_average_rating();
+    $count  = $product->get_review_count();
+
+    if ( $rating > 0 ) {
+        $html  = '<div class="star-rating" title="' . esc_attr( $rating ) . '">';
+        $html .= '<span style="width:' . ( ( $rating / 5 ) * 100 ) . '%">';
+        $html .= esc_html__( 'امتیاز', 'woo-persian-store' ) . ' ' . woopersian_persian_numerals( number_format( $rating, 1 ) );
+        $html .= '</span></div>';
+        echo $html;
+    }
+}
+
+/**
  * Add body classes
  */
 function woopersian_body_classes( $classes ) {
